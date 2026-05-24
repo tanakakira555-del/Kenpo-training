@@ -1,0 +1,22 @@
+{
+  "name": "社労士 一問一答",
+  "short_name": "社労士",
+  "description": "社会保険労務士試験 一問一答アプリ",
+  "start_url": "/Kenpo-training/",
+  "display": "standalone",
+  "background_color": "#0a0a0f",
+  "theme_color": "#0a0a0f",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "samune.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "samune.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
