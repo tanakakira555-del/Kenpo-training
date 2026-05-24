@@ -381,6 +381,12 @@ main {
 .bookmark-btn:hover, .bookmark-btn.active { opacity: 1; }
 
 </style>
+<link rel="manifest" href="manifest.json">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="社労士">
+<link rel="apple-touch-icon" href="samune.png">
+<meta name="theme-color" content="#0a0a0f">
 </head>
 <body>
 
@@ -588,6 +594,13 @@ function showComplete() {
 
 // 初期化
 restart();
+</script>
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/Kenpo-training/sw.js');
+  });
+}
 </script>
 </body>
 </html>
