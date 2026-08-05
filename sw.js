@@ -1,4 +1,4 @@
-const CACHE_NAME = 'sharoushi-v3';
+const CACHE_NAME = 'sharoushi-v4';
 const ASSETS = [
   '/Kenpo-training/',
   '/Kenpo-training/index.html',
@@ -10,6 +10,7 @@ const ASSETS = [
   '/Kenpo-training/data-koyoho.js',
   '/Kenpo-training/data-choshu.js',
   '/Kenpo-training/data-kenpo.js',
+    '/Kenpo-training/data-kokunen.js',
   '/Kenpo-training/data-kounen.js',
   '/Kenpo-training/samune.png'
 ];
