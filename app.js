@@ -6,6 +6,7 @@ const SUBJECTS = [
   { key: 'koyoho', title: '雇用保険法',       file: 'data-koyoho.js', varName: 'QUESTIONS_KOYOHO', count: 162 },
   { key: 'choshu', title: '労働保険料徴収法', file: 'data-choshu.js', varName: 'QUESTIONS_CHOSHU', count: 185 },
   { key: 'kenpo',  title: '健康保険法',       file: 'data-kenpo.js',  varName: 'QUESTIONS_KENPO',  count: 230 },
+  { key: 'kokunen', title: '国民年金法',      file: 'data-kokunen.js', varName: 'QUESTIONS_KOKUNEN', count: 230 },
   { key: 'kounen', title: '厚生年金保険法',   file: 'data-kounen.js', varName: 'QUESTIONS_KOUNEN', count: 230 },
 ];
 
