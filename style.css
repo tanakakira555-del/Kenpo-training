@@ -460,8 +460,198 @@ main {
 
 .loading-text {
   text-align: center;
-  padding: 60px 0;
+  padding: 60px 20px;
   color: var(--text2);
   font-family: 'JetBrains Mono', monospace;
   font-size: 12px;
+  line-height: 1.8;
+}
+
+/* ===== ホーム：学習サマリー ===== */
+.home-summary {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 16px;
+  margin-bottom: 18px;
+}
+
+.sum-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+  text-align: center;
+}
+
+.sum-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.sum-unit { font-size: 11px; margin-left: 2px; color: var(--text2); }
+
+.sum-lbl {
+  font-size: 10px;
+  color: var(--text2);
+  margin-top: 2px;
+}
+
+.week-chart {
+  display: flex;
+  gap: 6px;
+  margin: 16px 0 8px;
+  align-items: flex-end;
+}
+
+.week-col { flex: 1; text-align: center; }
+
+.week-num {
+  height: 14px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  color: var(--text2);
+}
+
+.week-bar {
+  height: 44px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  display: flex;
+  align-items: flex-end;
+  overflow: hidden;
+}
+
+.week-fill {
+  width: 100%;
+  background: #a8d97f;
+  min-height: 0;
+}
+
+.week-lbl {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  color: var(--text2);
+  margin-top: 3px;
+}
+
+.sum-sub {
+  font-size: 11px;
+  color: var(--text2);
+  font-family: 'JetBrains Mono', monospace;
+  text-align: right;
+  margin-bottom: 12px;
+}
+
+.review-all-btn {
+  width: 100%;
+  padding: 13px;
+  border: none;
+  border-radius: var(--radius);
+  background: var(--accent2);
+  color: white;
+  font-family: 'Noto Serif JP', serif;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+
+.review-all-btn:hover:not(:disabled) { opacity: 0.85; }
+
+.review-all-btn:disabled {
+  background: var(--surface2);
+  color: var(--text2);
+  border: 1px solid var(--border);
+  font-weight: 400;
+  cursor: default;
+}
+
+/* 科目カード内 */
+.subject-card-main { flex: 1; margin-right: 12px; }
+.subject-card-meta { flex-wrap: wrap; row-gap: 2px; }
+.subject-card-wrong { color: var(--accent2); font-weight: 700; }
+
+.subject-card-bar {
+  height: 4px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-top: 2px;
+}
+
+.subject-card-bar-fill {
+  height: 100%;
+  background: var(--accent);
+}
+
+/* 問題カード：履歴タグ・通知 */
+.bookmark-row { align-items: center; gap: 8px; }
+
+.hist-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  color: var(--text2);
+  margin-right: auto;
+}
+
+.hist-wrong { color: var(--accent2); border-color: var(--wrong-border); background: var(--wrong-bg); }
+.hist-ok { color: var(--accent); border-color: var(--correct-border); background: var(--correct-bg); }
+
+.result-note {
+  margin-top: 10px;
+  font-size: 11px;
+  padding: 6px 10px;
+  border-radius: 3px;
+  background: rgba(255,255,255,0.7);
+}
+
+.note-wrong { color: var(--accent2); }
+.note-ok { color: var(--accent); }
+
+/* 完了画面ボタン・フッター */
+.complete-btns {
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.complete-btns .nav-btn { flex: none; padding: 12px 24px; }
+
+.btn-wrong {
+  background: var(--accent2);
+  color: white;
+  border-color: var(--accent2);
+  font-weight: 600;
+}
+
+.btn-wrong:hover { opacity: 0.85; }
+
+.home-footer {
+  text-align: center;
+  margin-top: 28px;
+}
+
+.link-btn {
+  background: none;
+  border: none;
+  color: var(--text2);
+  font-family: 'Noto Serif JP', serif;
+  font-size: 11px;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.link-btn:hover { color: var(--accent2); }
+
+@media (max-width: 420px) {
+  .filter-select { min-width: 100%; }
+  .mode-btns { width: 100%; }
+  .mode-btn { flex: 1; padding: 7px 4px; }
 }

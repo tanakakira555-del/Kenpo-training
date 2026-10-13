@@ -30,20 +30,25 @@
 <main>
 
   <div id="home-view">
+    <div id="home-summary" class="home-summary"></div>
     <div class="home-intro">科目を選んでください（全<span id="home-total"></span>問）</div>
     <div class="home-grid" id="home-grid"></div>
+    <div class="home-footer">
+      <button class="link-btn" onclick="resetAllStats()">学習記録をリセット</button>
+    </div>
   </div>
 
   <div id="quiz-view" style="display:none">
-    <div class="filter-bar">
+    <div class="filter-bar" id="filter-bar">
       <span class="filter-label">章：</span>
       <select class="filter-select" id="section-select" onchange="applyFilter()">
         <option value="">全章</option>
       </select>
       <div class="mode-btns">
-        <button class="mode-btn active" onclick="setMode('all',this)">全問</button>
-        <button class="mode-btn" onclick="setMode('wrong',this)">誤問</button>
-        <button class="mode-btn" onclick="setMode('bookmark',this)">☆</button>
+        <button class="mode-btn active" data-mode="all" onclick="setMode('all',this)">全問</button>
+        <button class="mode-btn" data-mode="unseen" onclick="setMode('unseen',this)">未</button>
+        <button class="mode-btn" data-mode="wrong" onclick="setMode('wrong',this)">誤問</button>
+        <button class="mode-btn" data-mode="bookmark" onclick="setMode('bookmark',this)">☆</button>
       </div>
     </div>
 
@@ -58,10 +63,15 @@
       <div class="complete-score" id="cmp-score"></div>
       <div class="complete-label">問中正解</div>
       <div class="complete-pct" id="cmp-pct"></div>
-      <div class="nav-btns" style="justify-content:center">
-        <button class="nav-btn btn-next" onclick="restart()" style="flex:none;padding:12px 32px">もう一度</button>
-        <button class="nav-btn btn-prev" onclick="goHome()" style="flex:none;padding:12px 32px">科目一覧へ</button>
+      <div class="nav-btns complete-btns">
+        <button class="nav-btn btn-wrong" id="cmp-review-btn" onclick="reviewWrongNow()" style="display:none">誤問を復習</button>
+        <button class="nav-btn btn-next" onclick="restart()">もう一度</button>
+        <button class="nav-btn btn-prev" onclick="goHome()">科目一覧へ</button>
       </div>
+    </div>
+
+    <div class="home-footer" id="reset-row">
+      <button class="link-btn" onclick="resetSubjectStats()">この科目の学習記録をリセット</button>
     </div>
   </div>
 
