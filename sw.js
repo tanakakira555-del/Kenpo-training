@@ -1,4 +1,4 @@
-const CACHE_NAME = 'sharoushi-v5';
+const CACHE_NAME = 'sharoushi-v6';
 const ASSETS = [
   '/Kenpo-training/',
   '/Kenpo-training/index.html',
@@ -18,7 +18,9 @@ const ASSETS = [
 self.addEventListener('install', e => {
   self.skipWaiting();
   e.waitUntil(
-    caches.open(CACHE_NAME).then(cache => cache.addAll(ASSETS))
+    caches.open(CACHE_NAME).then(cache =>
+      Promise.all(ASSETS.map(u => fetch(new Request(u, { cache: 'reload' })).then(r => r.ok && cache.put(u, r)).catch(() => {})))
+    )
   );
 });
 
@@ -30,8 +32,18 @@ self.addEventListener('activate', e => {
   );
 });
 
+// ネットワーク優先（常に最新を取得）、オフライン時のみキャッシュを使う
 self.addEventListener('fetch', e => {
+  if (e.request.method !== 'GET') return;
   e.respondWith(
-    caches.match(e.request).then(res => res || fetch(e.request))
+    fetch(e.request)
+      .then(res => {
+        if (res && res.ok && new URL(e.request.url).origin === location.origin) {
+          const copy = res.clone();
+          caches.open(CACHE_NAME).then(c => c.put(e.request, copy));
+        }
+        return res;
+      })
+      .catch(() => caches.match(e.request))
   );
 });
