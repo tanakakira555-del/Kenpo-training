@@ -400,6 +400,15 @@ function buildQueue() {
     const j = Math.floor(Math.random() * (i + 1));
     [list[i], list[j]] = [list[j], list[i]];
   }
+  // 解いた回数が少ない順（同回数内はランダム）
+  const cache = {};
+  const tries = q => {
+    const k = qkey(q);
+    const st = cache[k] || (cache[k] = getStats(k));
+    const s = st[q.id];
+    return s ? (s.c || 0) + (s.w || 0) : 0;
+  };
+  list = list.map(q => [tries(q), q]).sort((a, b) => a[0] - b[0]).map(x => x[1]);
   return list;
 }
 
