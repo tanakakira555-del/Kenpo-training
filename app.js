@@ -19,7 +19,34 @@ let results = {};               // このセッションの結果（"科目:ID" 
 let bookmarks = new Set();
 let mode = 'all';
 let sectionFilter = '';
+let labelFilter = '';
+let mapSections = [];
 const loadedScripts = new Set();
+
+// ===== ラベル（自分で付ける分類） =====
+const LABELS = [
+  { id: 'trap',  t: 'ひっかけ' },
+  { id: 'num',   t: '数字の暗記' },
+  { id: 'term',  t: '用語・定義' },
+  { id: 'under', t: '理解不足' },
+  { id: 'again', t: '要再確認' },
+];
+const labelsCache = {};
+function getLabels(key) {
+  if (!labelsCache[key]) labelsCache[key] = lsGet('lb_' + key, {});
+  return labelsCache[key];
+}
+function qLabels(key, id) { return getLabels(key)[id] || []; }
+function toggleLabel(key, id, lid, btn) {
+  const all = getLabels(key);
+  const cur = all[id] || [];
+  const i = cur.indexOf(lid);
+  if (i >= 0) cur.splice(i, 1); else cur.push(lid);
+  if (cur.length) all[id] = cur; else delete all[id];
+  lsSet('lb_' + key, all);
+  btn.classList.toggle('on', i < 0);
+  updateLabelOptions();
+}
 
 function subj(key) { return SUBJECTS.find(s => s.key === key); }
 function cid(q) { return (q._s || currentSubjectKey) + ':' + q.id; }
@@ -214,6 +241,7 @@ function initSubject(subject) {
   bookmarks = loadBookmarks(subject.key);
   mode = 'all';
   sectionFilter = '';
+  labelFilter = '';
   document.querySelectorAll('.mode-btn').forEach(b => b.classList.toggle('active', b.dataset.mode === 'all'));
   restart();
 }
@@ -226,6 +254,7 @@ function startReviewAll() {
   currentSubjectKey = null;
   mode = 'wrong';
   sectionFilter = '';
+  labelFilter = '';
   showQuizView('誤問復習（全科目）');
   document.getElementById('filter-bar').style.display = 'none';
   document.getElementById('reset-row').style.display = 'none';
@@ -240,10 +269,79 @@ function reviewPool() {
     if (!loadedScripts.has(s.file)) return;
     const st = getStats(s.key);
     (window[s.varName] || []).forEach(q => {
-      if (st[q.id] && st[q.id].l === 0) pool.push(Object.assign({}, q, { _s: s.key }));
+      if (st[q.id] && st[q.id].l === 0 && (!labelFilter || qLabels(s.key, q.id).includes(labelFilter))) {
+        pool.push(Object.assign({}, q, { _s: s.key }));
+      }
     });
   });
   return pool;
+}
+
+function setLabelFilter() {
+  labelFilter = document.getElementById('label-select').value;
+  restart();
+}
+
+function updateLabelOptions() {
+  const sel = document.getElementById('label-select');
+  if (!sel) return;
+  const counts = {};
+  const countFor = (key, list) => {
+    const st = getStats(key);
+    list.forEach(q => {
+      // 誤問に付いたラベルを数える（全問モードでは全問が対象）
+      if (mode === 'wrong' && !(st[q.id] && st[q.id].l === 0)) return;
+      qLabels(key, q.id).forEach(l => { counts[l] = (counts[l] || 0) + 1; });
+    });
+  };
+  if (reviewAll) {
+    SUBJECTS.forEach(s => { if (loadedScripts.has(s.file)) countFor(s.key, window[s.varName] || []); });
+  } else if (currentSubjectKey) {
+    countFor(currentSubjectKey, ALL);
+  }
+  sel.innerHTML = '<option value="">すべて</option>' +
+    LABELS.map(l => `<option value="${l.id}">${l.t}${counts[l.id] ? '（' + counts[l.id] + '）' : ''}</option>`).join('');
+  sel.value = labelFilter;
+}
+
+// ===== 章別の誤問マップ =====
+function renderMap() {
+  const box = document.getElementById('map-body');
+  const panel = document.getElementById('map-panel');
+  if (!box || !panel) return;
+  if (reviewAll || !currentSubjectKey) { panel.style.display = 'none'; return; }
+  panel.style.display = '';
+  const st = getStats(currentSubjectKey);
+  const by = {};
+  ALL.forEach(q => {
+    const r = by[q.section] || (by[q.section] = { total: 0, wrong: 0 });
+    r.total++;
+    if (st[q.id] && st[q.id].l === 0) r.wrong++;
+  });
+  mapSections = Object.keys(by).filter(k => by[k].wrong > 0)
+    .sort((a, b) => by[b].wrong - by[a].wrong || by[b].wrong / by[b].total - by[a].wrong / by[a].total);
+  const totalWrong = mapSections.reduce((s, k) => s + by[k].wrong, 0);
+  document.getElementById('map-sum').textContent = totalWrong ? '（誤問 ' + totalWrong + '問）' : '';
+  if (!mapSections.length) {
+    box.innerHTML = '<div class="map-empty">誤問はまだありません。間違えた問題がある章がここに表示されます。</div>';
+    return;
+  }
+  const maxW = by[mapSections[0]].wrong;
+  box.innerHTML = mapSections.map((k, i) => {
+    const r = by[k];
+    const w = Math.round(r.wrong / maxW * 100);
+    return `<button class="map-row" onclick="mapSelect(${i})">
+      <span class="map-name">${k}</span>
+      <span class="map-bar"><span class="map-fill" style="width:${w}%"></span></span>
+      <span class="map-cnt">誤${r.wrong}/${r.total}</span>
+    </button>`;
+  }).join('');
+}
+
+function mapSelect(i) {
+  sectionFilter = mapSections[i];
+  setMode('wrong', document.querySelector('.mode-btn[data-mode="wrong"]'));
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 // ===== フィルタ・モード =====
@@ -296,6 +394,7 @@ function buildQueue() {
     if (mode === 'wrong') list = list.filter(q => st[q.id] && st[q.id].l === 0);
     if (mode === 'unseen') list = list.filter(q => !st[q.id]);
     if (mode === 'bookmark') list = list.filter(q => bookmarks.has(q.id));
+    if (labelFilter) list = list.filter(q => qLabels(currentSubjectKey, q.id).includes(labelFilter));
   }
   for (let i = list.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -308,6 +407,8 @@ function restart() {
   results = {};
   if (!reviewAll) buildSectionOptions();
   updateModeCounts();
+  updateLabelOptions();
+  renderMap();
   queue = buildQueue();
   currentIdx = 0;
   document.getElementById('complete-view').classList.remove('show');
@@ -369,6 +470,10 @@ function render() {
         <button class="ans-btn" data-val="false" onclick="answer(false)">×</button>
       </div>
       <div class="result-box" id="result-box"></div>
+      <div class="label-row" id="label-row" style="display:none">
+        <span class="label-cap">ラベル</span>
+        ${LABELS.map(l => `<button class="label-chip ${qLabels(key, q.id).includes(l.id) ? 'on' : ''}" onclick="toggleLabel('${key}', ${q.id}, '${l.id}', this)">${l.t}</button>`).join('')}
+      </div>
       <div class="nav-btns" id="nav-btns" style="display:none">
         <button class="nav-btn btn-prev" onclick="prev()">← 前</button>
         <button class="nav-btn btn-next" onclick="next()">次の問題 →</button>
@@ -410,8 +515,10 @@ function answer(userAnswer) {
   `;
 
   document.getElementById('nav-btns').style.display = 'flex';
+  document.getElementById('label-row').style.display = 'flex';
   updateStats();
   updateModeCounts();
+  renderMap();
 
   const correct = Object.values(results).filter(v => v === 'correct').length;
   const total = Object.keys(results).length;

@@ -52,6 +52,18 @@
       </div>
     </div>
 
+    <div class="label-bar" id="label-bar">
+      <span class="filter-label">ラベル：</span>
+      <select class="filter-select" id="label-select" onchange="setLabelFilter()">
+        <option value="">すべて</option>
+      </select>
+    </div>
+
+    <details class="map-panel" id="map-panel">
+      <summary>章別の誤問マップ <span id="map-sum"></span></summary>
+      <div id="map-body" class="map-body"></div>
+    </details>
+
     <div class="stats-bar">
       <div class="stat"><div class="dot dot-correct"></div>正解 <strong id="stat-correct">0</strong></div>
       <div class="stat"><div class="dot dot-wrong"></div>不正解 <strong id="stat-wrong">0</strong></div>

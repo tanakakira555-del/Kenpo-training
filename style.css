@@ -650,6 +650,124 @@ main {
 
 .link-btn:hover { color: var(--accent2); }
 
+/* ===== ラベル ===== */
+.label-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.label-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin-top: 12px;
+}
+
+.label-cap {
+  font-size: 10px;
+  color: var(--text2);
+  font-family: 'JetBrains Mono', monospace;
+  margin-right: 2px;
+}
+
+.label-chip {
+  padding: 4px 10px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--surface);
+  color: var(--text2);
+  font-family: 'Noto Serif JP', serif;
+  font-size: 11px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.label-chip:hover { border-color: var(--accent2); }
+
+.label-chip.on {
+  background: var(--accent2);
+  border-color: var(--accent2);
+  color: white;
+}
+
+/* ===== 章別の誤問マップ ===== */
+.map-panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  margin-bottom: 14px;
+  box-shadow: var(--shadow);
+}
+
+.map-panel summary {
+  padding: 10px 14px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  color: var(--text);
+}
+
+.map-panel summary span { font-weight: 400; color: var(--accent2); font-size: 11px; }
+
+.map-body { padding: 4px 10px 10px; }
+
+.map-empty {
+  padding: 10px 6px;
+  font-size: 11px;
+  color: var(--text2);
+}
+
+.map-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 6px 4px;
+  background: none;
+  border: none;
+  border-bottom: 1px dashed var(--border);
+  cursor: pointer;
+  text-align: left;
+  font-family: 'Noto Serif JP', serif;
+}
+
+.map-row:last-child { border-bottom: none; }
+.map-row:hover { background: var(--surface2); }
+
+.map-name {
+  flex: 0 0 38%;
+  font-size: 11px;
+  line-height: 1.4;
+  color: var(--text);
+}
+
+.map-bar {
+  flex: 1;
+  height: 10px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.map-fill {
+  display: block;
+  height: 100%;
+  background: var(--accent2);
+}
+
+.map-cnt {
+  flex: 0 0 auto;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--accent2);
+  min-width: 48px;
+  text-align: right;
+}
+
 @media (max-width: 420px) {
   .filter-select { min-width: 100%; }
   .mode-btns { width: 100%; }
