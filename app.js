@@ -3,7 +3,7 @@ const SUBJECTS = [
   { key: 'roki',   title: '労働基準法',       file: 'data-roki.js',   varName: 'QUESTIONS_ROKI',   count: 230 },
   { key: 'roan',   title: '労働安全衛生法',   file: 'data-roan.js',   varName: 'QUESTIONS_ROAN',   count: 110 },
   { key: 'rosai',  title: '労働者災害補償保険法', file: 'data-rosai.js', varName: 'QUESTIONS_ROSAI', count: 230 },
-  { key: 'koyoho', title: '雇用保険法',       file: 'data-koyoho.js', varName: 'QUESTIONS_KOYOHO', count: 162 },
+  { key: 'koyoho', title: '雇用保険法',       file: 'data-koyoho.js', varName: 'QUESTIONS_KOYOHO', count: 230 },
   { key: 'choshu', title: '労働保険料徴収法', file: 'data-choshu.js', varName: 'QUESTIONS_CHOSHU', count: 185 },
   { key: 'kenpo',  title: '健康保険法',       file: 'data-kenpo.js',  varName: 'QUESTIONS_KENPO',  count: 230 },
   { key: 'kokunen', title: '国民年金法',      file: 'data-kokunen.js', varName: 'QUESTIONS_KOKUNEN', count: 230 },
